@@ -51,98 +51,89 @@
     </div>
 </div>
 <div class="container">
-    <div id="adminPage" class="dashboard-grid"><div class="card"><h3>Statistik</h3><div id="statBox"></div></div>
+    <div id="adminPage" class="dashboard-grid">
+        <div class="card"><h3>Statistik</h3><div id="statBox"></div></div>
         <div class="card"><h3>Kelola Santri</h3><div style="display:flex; gap:10px;"><input type="text" id="namaSantriBaru" placeholder="Nama Santri" style="flex:1;"><button class="btn" id="tambahSantriwanBtn">+ Santriwan</button><button class="btn" id="tambahSantriwatiBtn">+ Santriwati</button></div>
         <div class="two-columns"><div><h4>Santriwan</h4><div id="listWan"></div></div><div><h4>Santriwati</h4><div id="listWati"></div></div></div></div>
         <div class="card"><h3>Manajemen Tugas</h3><input type="text" id="tugasJudul" placeholder="Judul Tugas"><textarea id="tugasDesc" rows="2" placeholder="Deskripsi"></textarea><button class="btn" id="btnTambahTugas">Simpan Tugas</button><div id="tugasListAdmin" style="margin-top:15px;"></div></div>
     </div>
-    <div id="parentPage" class="dashboard-grid"><div class="card"><h3>Rekap Kehadiran</h3><canvas id="parentChart" style="max-height:200px"></canvas></div>
+    <div id="parentPage" class="dashboard-grid">
+        <div class="card"><h3>Rekap Kehadiran</h3><canvas id="parentChart" style="max-height:200px"></canvas></div>
         <div class="card"><h3>Tugas Terbaru</h3><div id="parentTugasList"></div></div>
         <div class="card"><h3>Status Santri</h3><div id="parentSantriStatus"></div></div>
     </div>
-    <div id="attendancePage" class="dashboard-grid"><div class="card"><h3>Absensi Hari Ini</h3><div class="santri-grid" id="absenContainer"></div><div style="margin-top:1rem;"><button class="btn btn-warning" id="resetAbsenBtn">Reset</button><button class="btn" id="sendWABtn">Kirim WA</button></div></div>
+    <div id="attendancePage" class="dashboard-grid">
+        <div class="card"><h3>Absensi Hari Ini</h3><div class="santri-grid" id="absenContainer"></div><div style="margin-top:1rem;"><button class="btn btn-warning" id="resetAbsenBtn">Reset</button><button class="btn" id="sendWABtn">Kirim WA</button></div></div>
     </div>
 </div>
 <div id="toastMsg" class="toast"></div>
 <div id="passwordModal" class="modal"><div class="modal-content"><h3>Akses Terbatas</h3><p id="modalMsg"></p><input type="password" id="passInput"><div><button id="passConfirm">Masuk</button><button id="passCancel">Batal</button></div></div></div>
 
 <script>
-    // ======================= KONFIGURASI =======================
-    // ⚠️ GANTI URL INI DENGAN URL APPS SCRIPT ANDA YANG BARU! ⚠️
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzSSsZGlooescneTZ8K1PCiMmkCgYvqD07a0uyCScP1V_8h1UI4R_y3qtXoSe2tMWk5/exec";
+    // ======================= KONFIGURASI (⚠️ GANTI DENGAN LINK ANDA) =======================
+    const CSV_SANTRIWAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQj934LvpLD3x5EZ_t6eykdBUUy2ksOA1SJ8b0DYIibarFokQOqshgDsqJrX3yT_lwzdz0MmUOy8sqk/pub?gid=0&single=true&output=csv";
+    const CSV_SANTRIWATI = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQj934LvpLD3x5EZ_t6eykdBUUy2ksOA1SJ8b0DYIibarFokQOqshgDsqJrX3yT_lwzdz0MmUOy8sqk/pub?gid=491190605&single=true&output=csv";
+    const CSV_TUGAS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQj934LvpLD3x5EZ_t6eykdBUUy2ksOA1SJ8b0DYIibarFokQOqshgDsqJrX3yT_lwzdz0MmUOy8sqk/pub?gid=1689847811&single=true&output=csv";
+    const CSV_ABSEN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQj934LvpLD3x5EZ_t6eykdBUUy2ksOA1SJ8b0DYIibarFokQOqshgDsqJrX3yT_lwzdz0MmUOy8sqk/pub?gid=20112682&single=true&output=csv";
     
-    const SHEET_ID = "1kAqTsqqJdPQZOVw_7_YGXgkASpbIjNoiHH6_AIlFuig";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwA5uggrEyOkU7cVXuvK1BhvkuCthvFy14dp03L3tsiNSV_43MQGE6gAy68khn_0Tpk/exec";
+    
     let santriwan = [], santriwati = [], attendance = {}, tugas = [];
     let parentChart = null;
     let pendingResolve = null;
 
-    // ======================= FUNGSI BACA/SIMPAN KE APPS SCRIPT =======================
-    async function callScript(action, data = {}) {
-        try {
-            const response = await fetch(SCRIPT_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ action, ...data })
-            });
-            return await response.json();
-        } catch (e) {
-            console.error("Gagal:", e);
-            return null;
-        }
-    }
-
-    async function loadTugasFromSheet() {
-        const result = await callScript("loadTugas");
-        if (result && result.tugas) tugas = result.tugas;
-        else tugas = [];
-        renderAdminTugas();
-        renderParentView();
-    }
-
-    async function loadAbsenFromSheet() {
-        const result = await callScript("loadAbsen");
-        if (result && result.absen) attendance = result.absen;
-        else attendance = {};
-        renderAttendance();
-        renderParentView();
-        updateParentChart();
-        updateStatBox();
-    }
-
-    async function saveTugasToSheet(judul, deskripsi, target) {
-        await callScript("tambahTugas", { judul, deskripsi, target });
-        await loadTugasFromSheet();
-        showToast("✅ Tugas tersimpan ke cloud!");
-    }
-
-    async function saveAbsenToSheet(nama, status) {
-        const today = new Date().toISOString().split('T')[0];
-        await callScript("updateAbsen", { tanggal: today, nama, status });
-        await loadAbsenFromSheet();
-        showToast(`✅ ${nama}: ${status}`);
-    }
-
-    // ======================= BACA SANTRI DARI CSV =======================
+    // ======================= FUNGSI BACA CSV =======================
     async function fetchCSV(url) {
         try {
             const res = await fetch(url);
             const text = await res.text();
             const rows = text.split("\n").filter(r => r.trim());
-            return rows.slice(1).map(r => r.replace(/^"|"$/g, '').split(",")[0]).filter(n => n && n !== "Nama");
-        } catch(e) { return []; }
+            if (rows.length < 2) return [];
+            return rows.slice(1).map(r => {
+                let cleaned = r.replace(/^"|"$/g, '');
+                let firstCol = cleaned.split(",")[0];
+                return firstCol;
+            }).filter(n => n && n !== "Nama" && n !== "nama" && n !== "Judul");
+        } catch(e) { 
+            console.error("Fetch error:", url, e);
+            return []; 
+        }
     }
 
     async function loadSantriFromSheets() {
-        const urlWan = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?gid=0&output=csv`;
-        const urlWati = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?gid=2105765721&output=csv`;
-        const [wan, wati] = await Promise.all([fetchCSV(urlWan), fetchCSV(urlWati)]);
+        const [wan, wati] = await Promise.all([fetchCSV(CSV_SANTRIWAN), fetchCSV(CSV_SANTRIWATI)]);
         santriwan = wan;
         santriwati = wati;
         renderSantriLists();
         renderAttendance();
         renderParentView();
         updateStatBox();
-        showToast(`📥 Data santri: ${santriwan.length} santriwan, ${santriwati.length} santriwati`);
+        showToast(`📥 Santri: ${santriwan.length} santriwan, ${santriwati.length} santriwati`);
+    }
+
+    async function loadTugasFromSheet() {
+        const data = await fetchCSV(CSV_TUGAS);
+        // Data dari CSV tugas: kolom 1=judul, kolom2=deskripsi, kolom3=target, kolom4=tanggal
+        tugas = data.map((judul, i) => ({ id: i, judul, deskripsi: "Detail tugas", target: "all", tanggal: new Date().toLocaleDateString() }));
+        renderAdminTugas();
+        renderParentView();
+    }
+
+    async function loadAbsenFromSheet() {
+        const data = await fetchCSV(CSV_ABSEN);
+        // Data dari CSV absen: kolom1=tanggal, kolom2=nama, kolom3=status
+        const newAttendance = {};
+        const today = new Date().toISOString().split('T')[0];
+        for (let i = 0; i < data.length; i += 3) {
+            if (data[i] === today) {
+                newAttendance[data[i+1]] = data[i+2];
+            }
+        }
+        attendance = newAttendance;
+        renderAttendance();
+        renderParentView();
+        updateParentChart();
+        updateStatBox();
     }
 
     // ======================= FUNGSI TAMBAH SANTRI (Lokal) =======================
@@ -185,7 +176,7 @@
     function renderAdminTugas() {
         const container = document.getElementById("tugasListAdmin");
         if (!tugas.length) { container.innerHTML = "<p>Belum ada tugas</p>"; return; }
-        container.innerHTML = tugas.map((t, i) => `<div style="background:#f1f5f9;padding:10px;border-radius:12px;margin-bottom:8px;"><strong>📌 ${t.judul}</strong><br><small>${t.deskripsi || "-"}</small><br><small>📅 ${t.tanggal}</small></div>`).join("");
+        container.innerHTML = tugas.map(t => `<div style="background:#f1f5f9;padding:10px;border-radius:12px;margin-bottom:8px;"><strong>📌 ${t.judul}</strong><br><small>${t.deskripsi || "-"}</small><br><small>📅 ${t.tanggal}</small></div>`).join("");
     }
 
     function renderAttendance() {
@@ -201,7 +192,30 @@
             else if (status === "alpha") cls = "selected-alpha";
             return `<div class="santri-card ${cls}" data-name="${s}"><div><strong>${s}</strong></div><div class="status-options"><span class="status-option" data-status="hadir">✅ Hadir</span><span class="status-option" data-status="izin">📝 Izin</span><span class="status-option" data-status="sakit">🤒 Sakit</span><span class="status-option" data-status="alpha">❌ Alpha</span></div><div>${status ? status.toUpperCase() : "Belum"}</div></div>`;
         }).join("");
-        document.querySelectorAll(".status-option").forEach(opt => opt.onclick = (e) => { e.stopPropagation(); const name = opt.closest(".santri-card").dataset.name; saveAbsenToSheet(name, opt.dataset.status); });
+        document.querySelectorAll(".status-option").forEach(opt => opt.onclick = (e) => { e.stopPropagation(); const name = opt.closest(".santri-card").dataset.name; updateAbsenLocal(name, opt.dataset.status); });
+    }
+
+    function updateAbsenLocal(nama, status) {
+        attendance[nama] = status;
+        localStorage.setItem("attendance_today", JSON.stringify(attendance));
+        renderAttendance();
+        renderParentView();
+        updateParentChart();
+        updateStatBox();
+        showToast(`${nama}: ${status}`);
+        // Opsional: kirim ke Apps Script jika perlu
+    }
+
+    function resetAbsen() {
+        if (confirm("Reset semua absen?")) {
+            attendance = {};
+            localStorage.setItem("attendance_today", JSON.stringify(attendance));
+            renderAttendance();
+            renderParentView();
+            updateParentChart();
+            updateStatBox();
+            showToast("Absen direset");
+        }
     }
 
     function renderParentView() {
@@ -223,7 +237,7 @@
     }
 
     function updateStatBox() {
-        document.getElementById("statBox").innerHTML = `<div style="display:flex; gap:10px;"><div>👨 Santriwan: ${santriwan.length}</div><div>👩 Santriwati: ${santriwati.length}</div><div>📋 Tugas: ${tugas.length}</div><div>✅ Hadir: ${Object.values(attendance).filter(v=>v==="hadir").length}</div></div>`;
+        document.getElementById("statBox").innerHTML = `<div style="display:flex; gap:10px; flex-wrap:wrap;"><div>👨 Santriwan: ${santriwan.length}</div><div>👩 Santriwati: ${santriwati.length}</div><div>📋 Tugas: ${tugas.length}</div><div>✅ Hadir: ${Object.values(attendance).filter(v=>v==="hadir").length}</div></div>`;
     }
 
     function sendWA() {
@@ -253,11 +267,10 @@
     document.querySelectorAll(".nav-btn").forEach(btn => btn.onclick = () => switchPage(btn.dataset.page));
     document.getElementById("tambahSantriwanBtn").onclick = () => { tambahSantri("wan", document.getElementById("namaSantriBaru").value); document.getElementById("namaSantriBaru").value = ""; };
     document.getElementById("tambahSantriwatiBtn").onclick = () => { tambahSantri("wati", document.getElementById("namaSantriBaru").value); document.getElementById("namaSantriBaru").value = ""; };
-    document.getElementById("btnTambahTugas").onclick = () => { saveTugasToSheet(document.getElementById("tugasJudul").value, document.getElementById("tugasDesc").value, "all"); document.getElementById("tugasJudul").value = ""; document.getElementById("tugasDesc").value = ""; };
-    document.getElementById("resetAbsenBtn").onclick = () => { if(confirm("Reset semua absen?")) { attendance = {}; localStorage.removeItem("attendance_today"); renderAll(); showToast("Absen direset (lokal)"); } };
+    document.getElementById("btnTambahTugas").onclick = () => { showToast("Fitur tambah tugas via CSV sedang dalam pengembangan"); };
+    document.getElementById("resetAbsenBtn").onclick = resetAbsen;
     document.getElementById("sendWABtn").onclick = sendWA;
 
-    // Load data
     const storedWan = localStorage.getItem("santriwan_list");
     const storedWati = localStorage.getItem("santriwati_list");
     if (storedWan) santriwan = JSON.parse(storedWan);
@@ -266,7 +279,7 @@
     loadSantriFromSheets();
     loadTugasFromSheet();
     loadAbsenFromSheet();
-    setInterval(() => { loadAbsenFromSheet(); loadTugasFromSheet(); }, 10000);
+    setInterval(() => { loadAbsenFromSheet(); loadTugasFromSheet(); }, 15000);
 </script>
 </body>
 </html>
