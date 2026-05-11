@@ -2,151 +2,48 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Pemantauan Santri LIVE | Ponpes Maslakul Iman</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Pemantauan Santri | Ponpes Maslakul Iman</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background: linear-gradient(145deg, #eef2f7 0%, #d9e0e8 100%); min-height: 100vh; padding-bottom: 2rem; }
-        .navbar {
-            background: linear-gradient(135deg, #1a472a, #0d2b1c);
-            color: white;
-            padding: 1rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .logo h2 { font-size: 1.3rem; display: flex; align-items: center; gap: 8px; }
-        .logo p { font-size: 0.65rem; opacity: 0.9; }
-        .nav-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
-        .nav-btn {
-            background: rgba(255,255,255,0.15);
-            border: none;
-            padding: 6px 14px;
-            border-radius: 40px;
-            color: white;
-            font-weight: 500;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .navbar { background: linear-gradient(135deg, #1a472a, #0d2b1c); color: white; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; position: sticky; top: 0; z-index: 100; }
+        .nav-btn { background: rgba(255,255,255,0.15); border: none; padding: 6px 14px; border-radius: 40px; color: white; cursor: pointer; margin: 0 4px; }
         .nav-btn.active { background: #fbbf24; color: #1a472a; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
         .dashboard-grid { display: none; animation: fadeIn 0.3s ease; }
         .dashboard-grid.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .card {
-            background: rgba(255,255,255,0.95);
-            border-radius: 1.5rem;
-            padding: 1.2rem;
-            margin-bottom: 1.2rem;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-            border: 1px solid rgba(255,255,255,0.5);
-        }
-        .card h3 { font-size: 1.2rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; color: #1a472a; border-left: 4px solid #fbbf24; padding-left: 12px; }
-        .form-group { margin-bottom: 0.8rem; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid #cbd5e1;
-            border-radius: 12px;
-            font-size: 0.9rem;
-        }
-        .btn {
-            background: #1a472a;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.85rem;
-        }
+        .card { background: white; border-radius: 1.5rem; padding: 1.2rem; margin-bottom: 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+        .card h3 { color: #1a472a; border-left: 4px solid #fbbf24; padding-left: 12px; margin-bottom: 1rem; }
+        input, textarea { width: 100%; padding: 10px; border-radius: 40px; border: 1px solid #cbd5e1; margin-bottom: 8px; }
+        textarea { border-radius: 12px; }
+        .btn { background: #1a472a; color: white; border: none; padding: 8px 16px; border-radius: 40px; cursor: pointer; margin: 4px; }
         .btn-warning { background: #fbbf24; color: #1a472a; }
         .btn-danger { background: #dc2626; }
-        .btn-outline { background: transparent; border: 1.5px solid #1a472a; color: #1a472a; }
-        .santri-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 12px;
-            max-height: 500px;
-            overflow-y: auto;
-            padding: 4px;
-        }
-        .santri-card {
-            background: #f8fafc;
-            border-radius: 1rem;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: 0.2s;
-        }
+        .santri-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; max-height: 500px; overflow-y: auto; }
+        .santri-card { background: #f8fafc; border-radius: 1rem; padding: 10px; text-align: center; cursor: pointer; border: 2px solid transparent; }
         .santri-card.selected-hadir { border-color: #10b981; background: #d1fae5; }
         .santri-card.selected-izin { border-color: #f59e0b; background: #fed7aa; }
         .santri-card.selected-sakit { border-color: #3b82f6; background: #dbeafe; }
         .santri-card.selected-alpha { border-color: #ef4444; background: #fee2e2; }
         .status-options { display: flex; justify-content: center; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
         .status-option { font-size: 0.7rem; padding: 3px 8px; border-radius: 20px; background: white; cursor: pointer; }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
-        .modal-content {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 1.5rem;
-            max-width: 320px;
-            width: 85%;
-            text-align: center;
-        }
-        .modal-content input { width: 100%; padding: 10px; margin: 1rem 0; border-radius: 40px; border: 1px solid #ccc; }
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: #1a472a;
-            color: white;
-            padding: 10px 18px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            z-index: 1100;
-            opacity: 0;
-            transition: 0.2s;
-        }
+        .modal-content { background: white; padding: 1.5rem; border-radius: 1rem; max-width: 320px; width: 90%; text-align: center; }
+        .toast { position: fixed; bottom: 20px; left: 20px; background: #1a472a; color: white; padding: 8px 16px; border-radius: 40px; opacity: 0; transition: 0.2s; z-index: 1100; }
         .santri-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #f8fafc; margin-bottom: 6px; border-radius: 40px; }
         .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        @media (max-width: 640px) { .container { padding: 1rem; } .nav-btn { padding: 4px 12px; font-size: 0.7rem; } .two-columns { grid-template-columns: 1fr; } }
-        .live-badge { background: #10b98120; color: #10b981; padding: 2px 8px; border-radius: 20px; font-size: 0.6rem; display: inline-block; margin-left: 8px; }
+        @media (max-width: 640px) { .two-columns { grid-template-columns: 1fr; } }
+        .live-badge { background: #10b98120; color: #10b981; padding: 2px 8px; border-radius: 20px; font-size: 0.6rem; margin-left: 8px; }
     </style>
 </head>
 <body>
 <div class="navbar">
-    <div class="logo"><h2><i class="fas fa-mosque"></i> Maslakul Iman <span class="live-badge"><i class="fas fa-circle"></i> LIVE</span></h2><p>Sistem Pemantauan Santri Real-time</p></div>
+    <div class="logo"><h2><i class="fas fa-mosque"></i> Maslakul Iman <span class="live-badge"><i class="fas fa-globe"></i> LIVE</span></h2></div>
     <div class="nav-buttons">
         <button class="nav-btn" data-page="admin">👑 Admin</button>
         <button class="nav-btn" data-page="parent">👪 Pantau</button>
@@ -154,445 +51,222 @@
     </div>
 </div>
 <div class="container">
-    <div id="adminPage" class="dashboard-grid">
-        <div class="card"><h3><i class="fas fa-chart-line"></i> Statistik LIVE</h3><div id="statBox"></div></div>
-        <div class="card"><h3><i class="fas fa-user-plus"></i> Kelola Santri</h3>
-            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px;">
-                <input type="text" id="namaSantriBaru" placeholder="Nama Santri Baru" style="flex:1; padding:8px; border-radius:40px; border:1px solid #ccc;">
-                <button class="btn" id="tambahSantriwanBtn"><i class="fas fa-male"></i> Santriwan</button>
-                <button class="btn" id="tambahSantriwatiBtn"><i class="fas fa-female"></i> Santriwati</button>
-            </div>
-            <div class="two-columns">
-                <div><h4>👨 Santriwan</h4><div id="listWan"></div></div>
-                <div><h4>👩 Santriwati</h4><div id="listWati"></div></div>
-            </div>
-        </div>
-        <div class="card"><h3><i class="fas fa-tasks"></i> Manajemen Tugas</h3>
-            <div class="form-group"><input type="text" id="tugasJudul" placeholder="Judul Tugas"></div>
-            <div class="form-group"><textarea id="tugasDesc" rows="2" placeholder="Deskripsi Tugas"></textarea></div>
-            <button class="btn" id="btnTambahTugas"><i class="fas fa-save"></i> Simpan Tugas (LIVE)</button>
-            <div id="tugasListAdmin" style="margin-top:15px;"></div>
-        </div>
+    <div id="adminPage" class="dashboard-grid"><div class="card"><h3>Statistik</h3><div id="statBox"></div></div>
+        <div class="card"><h3>Kelola Santri</h3><div style="display:flex; gap:10px;"><input type="text" id="namaSantriBaru" placeholder="Nama Santri" style="flex:1;"><button class="btn" id="tambahSantriwanBtn">+ Santriwan</button><button class="btn" id="tambahSantriwatiBtn">+ Santriwati</button></div>
+        <div class="two-columns"><div><h4>Santriwan</h4><div id="listWan"></div></div><div><h4>Santriwati</h4><div id="listWati"></div></div></div></div>
+        <div class="card"><h3>Manajemen Tugas</h3><input type="text" id="tugasJudul" placeholder="Judul Tugas"><textarea id="tugasDesc" rows="2" placeholder="Deskripsi"></textarea><button class="btn" id="btnTambahTugas">Simpan Tugas</button><div id="tugasListAdmin" style="margin-top:15px;"></div></div>
     </div>
-    <div id="parentPage" class="dashboard-grid">
-        <div class="card"><h3><i class="fas fa-chart-pie"></i> Rekap Kehadiran Hari Ini</h3><canvas id="parentChart" width="300" height="200" style="max-height:200px"></canvas></div>
-        <div class="card"><h3><i class="fas fa-tasks"></i> Tugas Terbaru</h3><div id="parentTugasList"></div></div>
-        <div class="card"><h3><i class="fas fa-users"></i> Status Santri Hari Ini</h3><div id="parentSantriStatus"></div></div>
+    <div id="parentPage" class="dashboard-grid"><div class="card"><h3>Rekap Kehadiran</h3><canvas id="parentChart" style="max-height:200px"></canvas></div>
+        <div class="card"><h3>Tugas Terbaru</h3><div id="parentTugasList"></div></div>
+        <div class="card"><h3>Status Santri</h3><div id="parentSantriStatus"></div></div>
     </div>
-    <div id="attendancePage" class="dashboard-grid">
-        <div class="card"><h3><i class="fas fa-calendar-check"></i> Absensi Hari Ini <span class="live-badge"><i class="fas fa-sync-alt"></i> Real-time</span></h3>
-            <div class="santri-grid" id="absenContainer"></div>
-            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 1rem;"><button class="btn btn-warning" id="resetAbsenBtn"><i class="fas fa-sync-alt"></i> Reset Hari Ini</button><button class="btn" id="sendWABtn"><i class="fab fa-whatsapp"></i> Kirim Laporan WA</button></div>
-        </div>
+    <div id="attendancePage" class="dashboard-grid"><div class="card"><h3>Absensi Hari Ini</h3><div class="santri-grid" id="absenContainer"></div><div style="margin-top:1rem;"><button class="btn btn-warning" id="resetAbsenBtn">Reset</button><button class="btn" id="sendWABtn">Kirim WA</button></div></div>
     </div>
 </div>
 <div id="toastMsg" class="toast"></div>
-<div id="passwordModal" class="modal"><div class="modal-content"><i class="fas fa-lock" style="font-size:2rem"></i><h3>Akses Terbatas</h3><p id="modalMsg"></p><input type="password" id="passInput" placeholder="Password"><div style="display:flex;gap:10px;justify-content:center"><button id="passConfirm" class="btn">Masuk</button><button id="passCancel" class="btn btn-outline">Batal</button></div><div id="passError" style="color:red;font-size:0.75rem;margin-top:8px"></div></div></div>
+<div id="passwordModal" class="modal"><div class="modal-content"><h3>Akses Terbatas</h3><p id="modalMsg"></p><input type="password" id="passInput"><div><button id="passConfirm">Masuk</button><button id="passCancel">Batal</button></div></div></div>
 
 <script>
     // ======================= KONFIGURASI =======================
-    const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQj934LvpLD3x5EZ_t6eykdBUUy2ksOA1SJ8b0DYIibarFokQOqshgDsqJrX3yT_lwzdz0MmUOy8sqk/pub?output=csv";
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxzk6k10C2gJXLIyBKH81yp9DZwmHFGMAAzlAwh-r-SnPwE8wrRfdw0riHJqw_H7B7F/exec";
+    // ⚠️ GANTI URL INI DENGAN URL APPS SCRIPT ANDA YANG BARU! ⚠️
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzSSsZGlooescneTZ8K1PCiMmkCgYvqD07a0uyCScP1V_8h1UI4R_y3qtXoSe2tMWk5/exec";
     
-    let santriwan = [];
-    let santriwati = [];
-    let attendance = {};
-    let tugas = [];
-    let currentPage = "admin";
-    let pendingResolve = null;
+    const SHEET_ID = "1kAqTsqqJdPQZOVw_7_YGXgkASpbIjNoiHH6_AIlFuig";
+    let santriwan = [], santriwati = [], attendance = {}, tugas = [];
     let parentChart = null;
+    let pendingResolve = null;
 
-    // ======================= BACA DATA DARI GOOGLE SHEETS (LIVE) =======================
+    // ======================= FUNGSI BACA/SIMPAN KE APPS SCRIPT =======================
+    async function callScript(action, data = {}) {
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action, ...data })
+            });
+            return await response.json();
+        } catch (e) {
+            console.error("Gagal:", e);
+            return null;
+        }
+    }
+
+    async function loadTugasFromSheet() {
+        const result = await callScript("loadTugas");
+        if (result && result.tugas) tugas = result.tugas;
+        else tugas = [];
+        renderAdminTugas();
+        renderParentView();
+    }
+
+    async function loadAbsenFromSheet() {
+        const result = await callScript("loadAbsen");
+        if (result && result.absen) attendance = result.absen;
+        else attendance = {};
+        renderAttendance();
+        renderParentView();
+        updateParentChart();
+        updateStatBox();
+    }
+
+    async function saveTugasToSheet(judul, deskripsi, target) {
+        await callScript("tambahTugas", { judul, deskripsi, target });
+        await loadTugasFromSheet();
+        showToast("✅ Tugas tersimpan ke cloud!");
+    }
+
+    async function saveAbsenToSheet(nama, status) {
+        const today = new Date().toISOString().split('T')[0];
+        await callScript("updateAbsen", { tanggal: today, nama, status });
+        await loadAbsenFromSheet();
+        showToast(`✅ ${nama}: ${status}`);
+    }
+
+    // ======================= BACA SANTRI DARI CSV =======================
     async function fetchCSV(url) {
         try {
-            const response = await fetch(url);
-            const text = await response.text();
-            const rows = text.split("\n").filter(row => row.trim());
-            return rows.slice(1).map(row => row.replace(/^"|"$/g, '').split(",")[0]).filter(name => name && name !== "Nama");
-        } catch (error) {
-            console.error("Gagal fetch CSV:", error);
-            return [];
-        }
+            const res = await fetch(url);
+            const text = await res.text();
+            const rows = text.split("\n").filter(r => r.trim());
+            return rows.slice(1).map(r => r.replace(/^"|"$/g, '').split(",")[0]).filter(n => n && n !== "Nama");
+        } catch(e) { return []; }
     }
 
     async function loadSantriFromSheets() {
-        // Baca semua sheet dari CSV (gid berbeda)
-        // Karena CSV hanya menampilkan sheet pertama, kita perlu URL terpisah untuk setiap sheet
-        // Tapi karena spreadsheet hanya punya 1 sheet yang dipublish, kita gunakan 1 URL untuk santriwan & santriwati
-        // Untuk sementara, kita ambil dari URL yang sama. Nanti bisa ditambah sheet lain.
-        const allData = await fetchCSV(CSV_URL);
-        // Pisahkan data: karena CSV hanya 1 sheet, kita asumsikan sheet santriwan
-        santriwan = allData;
-        santriwati = []; // Untuk sementara kosong, nanti bisa ditambah manual atau dari sheet lain
-        
-        // Load attendance & tasks from localStorage
-        const storedAttendance = localStorage.getItem("attendance_today");
-        if (storedAttendance) attendance = JSON.parse(storedAttendance);
-        else attendance = {};
-        
-        const storedTugas = localStorage.getItem("tugas_list");
-        if (storedTugas) tugas = JSON.parse(storedTugas);
-        else tugas = [];
-        
-        renderAll();
-        showToast("Data berhasil dimuat dari Google Sheets!");
+        const urlWan = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?gid=0&output=csv`;
+        const urlWati = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?gid=2105765721&output=csv`;
+        const [wan, wati] = await Promise.all([fetchCSV(urlWan), fetchCSV(urlWati)]);
+        santriwan = wan;
+        santriwati = wati;
+        renderSantriLists();
+        renderAttendance();
+        renderParentView();
+        updateStatBox();
+        showToast(`📥 Data santri: ${santriwan.length} santriwan, ${santriwati.length} santriwati`);
     }
 
-    // ======================= KIRIM DATA KE APPS SCRIPT =======================
-    async function sendToScript(action, data) {
-        try {
-            const payload = { action, ...data };
-            const response = await fetch(SCRIPT_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-            showToast(`✅ ${action} berhasil disimpan ke cloud!`);
-            return true;
-        } catch (error) {
-            console.error("Gagal kirim ke script:", error);
-            showToast(`⚠️ Gagal menyimpan ke cloud, data hanya tersimpan lokal`);
-            return false;
-        }
-    }
-
-    // ======================= FUNGSI TAMBAH SANTRI (LIVE) =======================
-    async function tambahSantri(gender, nama) {
+    // ======================= FUNGSI TAMBAH SANTRI (Lokal) =======================
+    function tambahSantri(gender, nama) {
         if (!nama.trim()) return showToast("Nama tidak boleh kosong");
         if (gender === "wan") {
             if (santriwan.includes(nama)) return showToast("Nama sudah ada");
             santriwan.push(nama);
-            santriwan.sort((a,b) => a.localeCompare(b));
+            santriwan.sort();
         } else {
             if (santriwati.includes(nama)) return showToast("Nama sudah ada");
             santriwati.push(nama);
-            santriwati.sort((a,b) => a.localeCompare(b));
+            santriwati.sort();
         }
-        saveToLocal();
-        renderAll();
-        showToast(`✅ ${nama} ditambahkan (tersimpan di HP ini)`);
+        localStorage.setItem("santriwan_list", JSON.stringify(santriwan));
+        localStorage.setItem("santriwati_list", JSON.stringify(santriwati));
+        renderSantriLists();
+        renderAttendance();
+        updateStatBox();
+        showToast(`✅ ${nama} ditambahkan`);
     }
 
     function hapusSantri(gender, nama) {
-        if (!confirm(`Hapus ${nama} dari daftar?`)) return;
-        if (gender === "wan") {
-            santriwan = santriwan.filter(n => n !== nama);
-        } else {
-            santriwati = santriwati.filter(n => n !== nama);
-        }
-        delete attendance[nama];
-        saveToLocal();
-        renderAll();
-        showToast(`🗑️ ${nama} dihapus`);
-    }
-
-    // ======================= FUNGSI TUGAS (LIVE KE SHEETS) =======================
-    async function tambahTugas(judul, desc) {
-        if (!judul.trim()) return showToast("Judul wajib diisi");
-        const newTugas = {
-            id: Date.now(),
-            judul: judul,
-            deskripsi: desc,
-            tanggal: new Date().toLocaleDateString('id-ID')
-        };
-        tugas.push(newTugas);
-        saveToLocal();
-        renderAdminTugas();
-        renderParentView();
-        
-        // Kirim ke Google Sheets via Apps Script
-        await sendToScript("tambahTugas", {
-            judul: judul,
-            deskripsi: desc,
-            target: "all"
-        });
-        
-        showToast("📌 Tugas tersimpan & tersinkron!");
-        document.getElementById("tugasJudul").value = "";
-        document.getElementById("tugasDesc").value = "";
-    }
-
-    function hapusTugas(id) {
-        tugas = tugas.filter(t => t.id !== id);
-        saveToLocal();
-        renderAdminTugas();
-        renderParentView();
-        showToast("Tugas dihapus");
-    }
-
-    // ======================= FUNGSI ABSENSI (LIVE KE SHEETS) =======================
-    async function updateAbsen(nama, status) {
-        attendance[nama] = status;
-        saveToLocal();
-        renderAttendance();
-        renderParentView();
-        updateParentChart();
-        updateStatBox();
-        
-        // Kirim ke Google Sheets via Apps Script
-        const today = new Date().toISOString().split('T')[0];
-        await sendToScript("updateAbsen", {
-            tanggal: today,
-            nama: nama,
-            status: status
-        });
-    }
-
-    function resetAbsen() {
-        if (confirm("Reset semua absen hari ini?")) {
-            attendance = {};
-            saveToLocal();
-            renderAttendance();
-            renderParentView();
-            updateParentChart();
-            showToast("Absen direset");
-        }
-    }
-
-    // ======================= RENDER SEMUA =======================
-    function renderAll() {
+        if (!confirm(`Hapus ${nama}?`)) return;
+        if (gender === "wan") santriwan = santriwan.filter(n => n !== nama);
+        else santriwati = santriwati.filter(n => n !== nama);
+        localStorage.setItem("santriwan_list", JSON.stringify(santriwan));
+        localStorage.setItem("santriwati_list", JSON.stringify(santriwati));
         renderSantriLists();
-        renderAdminTugas();
         renderAttendance();
-        renderParentView();
-        updateParentChart();
         updateStatBox();
     }
 
+    // ======================= RENDER =======================
     function renderSantriLists() {
-        const wanDiv = document.getElementById("listWan");
-        const watiDiv = document.getElementById("listWati");
-        wanDiv.innerHTML = santriwan.map(n => `<div class="santri-item"><span>👨 ${n}</span><button class="btn-danger" style="padding:4px 10px;" onclick="hapusSantri('wan','${n}')">Hapus</button></div>`).join("");
-        watiDiv.innerHTML = santriwati.map(n => `<div class="santri-item"><span>👩 ${n}</span><button class="btn-danger" style="padding:4px 10px;" onclick="hapusSantri('wati','${n}')">Hapus</button></div>`).join("");
+        document.getElementById("listWan").innerHTML = santriwan.map(n => `<div class="santri-item"><span>👨 ${n}</span><button class="btn-danger" style="padding:4px 12px;" onclick="hapusSantri('wan','${n}')">Hapus</button></div>`).join("");
+        document.getElementById("listWati").innerHTML = santriwati.map(n => `<div class="santri-item"><span>👩 ${n}</span><button class="btn-danger" style="padding:4px 12px;" onclick="hapusSantri('wati','${n}')">Hapus</button></div>`).join("");
     }
 
     function renderAdminTugas() {
         const container = document.getElementById("tugasListAdmin");
-        if (tugas.length === 0) {
-            container.innerHTML = "<p style='text-align:center;color:gray;'>Belum ada tugas. Silakan tambah tugas.</p>";
-            return;
-        }
-        container.innerHTML = tugas.map(t => `
-            <div style="background:#f1f5f9;padding:12px;border-radius:12px;margin-bottom:10px;">
-                <strong>📌 ${t.judul}</strong><br>
-                <small>${t.deskripsi || "-"}</small><br>
-                <small style="color:gray;">📅 ${t.tanggal}</small>
-                <button class="btn-outline" style="margin-top:8px;padding:4px 12px;" onclick="hapusTugas(${t.id})">Hapus</button>
-            </div>
-        `).join("");
+        if (!tugas.length) { container.innerHTML = "<p>Belum ada tugas</p>"; return; }
+        container.innerHTML = tugas.map((t, i) => `<div style="background:#f1f5f9;padding:10px;border-radius:12px;margin-bottom:8px;"><strong>📌 ${t.judul}</strong><br><small>${t.deskripsi || "-"}</small><br><small>📅 ${t.tanggal}</small></div>`).join("");
     }
 
     function renderAttendance() {
-        const allSantri = [...santriwan.map(n=>({name:n})), ...santriwati.map(n=>({name:n}))];
+        const allSantri = [...santriwan, ...santriwati];
         const container = document.getElementById("absenContainer");
-        if (allSantri.length === 0) {
-            container.innerHTML = "<p style='text-align:center;'>Belum ada santri</p>";
-            return;
-        }
+        if (!allSantri.length) { container.innerHTML = "<p>Belum ada santri</p>"; return; }
         container.innerHTML = allSantri.map(s => {
-            const status = attendance[s.name] || "";
+            const status = attendance[s] || "";
             let cls = "";
             if (status === "hadir") cls = "selected-hadir";
             else if (status === "izin") cls = "selected-izin";
             else if (status === "sakit") cls = "selected-sakit";
             else if (status === "alpha") cls = "selected-alpha";
-            return `
-                <div class="santri-card ${cls}" data-name="${s.name}">
-                    <div class="santri-name">${s.name}</div>
-                    <div class="status-options">
-                        <span class="status-option" data-status="hadir">✅ Hadir</span>
-                        <span class="status-option" data-status="izin">📝 Izin</span>
-                        <span class="status-option" data-status="sakit">🤒 Sakit</span>
-                        <span class="status-option" data-status="alpha">❌ Alpha</span>
-                    </div>
-                    <div style="font-size:12px;margin-top:6px;">${status ? status.toUpperCase() : "Belum"}</div>
-                </div>
-            `;
+            return `<div class="santri-card ${cls}" data-name="${s}"><div><strong>${s}</strong></div><div class="status-options"><span class="status-option" data-status="hadir">✅ Hadir</span><span class="status-option" data-status="izin">📝 Izin</span><span class="status-option" data-status="sakit">🤒 Sakit</span><span class="status-option" data-status="alpha">❌ Alpha</span></div><div>${status ? status.toUpperCase() : "Belum"}</div></div>`;
         }).join("");
-        
-        document.querySelectorAll(".status-option").forEach(opt => {
-            opt.onclick = (e) => {
-                e.stopPropagation();
-                const card = opt.closest(".santri-card");
-                const name = card.getAttribute("data-name");
-                const status = opt.getAttribute("data-status");
-                updateAbsen(name, status);
-            };
-        });
+        document.querySelectorAll(".status-option").forEach(opt => opt.onclick = (e) => { e.stopPropagation(); const name = opt.closest(".santri-card").dataset.name; saveAbsenToSheet(name, opt.dataset.status); });
     }
 
     function renderParentView() {
-        const allSantri = [...santriwan.map(n=>({name:n})), ...santriwati.map(n=>({name:n}))];
-        const parentStatus = document.getElementById("parentSantriStatus");
-        if (allSantri.length === 0) {
-            parentStatus.innerHTML = "<p>Belum ada santri</p>";
-        } else {
-            parentStatus.innerHTML = allSantri.map(s => `
-                <div style="padding:8px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between;">
-                    <span><strong>${s.name}</strong></span>
-                    <span class="status-badge" style="background:${attendance[s.name] === 'hadir' ? '#10b98120' : attendance[s.name] === 'izin' ? '#f59e0b20' : attendance[s.name] === 'sakit' ? '#3b82f620' : '#ef444420'}; padding:2px 12px; border-radius:20px;">${attendance[s.name] || "Belum"}</span>
-                </div>
-            `).join("");
-        }
-        
-        const parentTugas = document.getElementById("parentTugasList");
-        if (tugas.length === 0) {
-            parentTugas.innerHTML = "<p style='text-align:center;color:gray;'>Belum ada tugas</p>";
-        } else {
-            parentTugas.innerHTML = tugas.map(t => `
-                <div style="background:#f1f5f9;padding:10px;border-radius:12px;margin-bottom:8px;">
-                    <strong>📖 ${t.judul}</strong><br>
-                    <small>${t.deskripsi || "-"}</small><br>
-                    <small style="color:gray;">📅 ${t.tanggal}</small>
-                </div>
-            `).join("");
-        }
+        const allSantri = [...santriwan, ...santriwati];
+        document.getElementById("parentSantriStatus").innerHTML = allSantri.map(s => `<div style="padding:6px; border-bottom:1px solid #ccc;"><strong>${s}</strong> : ${attendance[s] || "Belum"}</div>`).join("");
+        if (!tugas.length) { document.getElementById("parentTugasList").innerHTML = "<p>Belum ada tugas</p>"; return; }
+        document.getElementById("parentTugasList").innerHTML = tugas.map(t => `<div style="background:#f1f5f9;padding:10px;border-radius:12px;margin-bottom:8px;"><strong>📖 ${t.judul}</strong><br>${t.deskripsi}<br><small>📅 ${t.tanggal}</small></div>`).join("");
     }
 
     function updateParentChart() {
-        const ctx = document.getElementById("parentChart").getContext("2d");
+        const ctx = document.getElementById("parentChart")?.getContext("2d");
+        if (!ctx) return;
         const hadir = Object.values(attendance).filter(v=>v==="hadir").length;
         const izin = Object.values(attendance).filter(v=>v==="izin").length;
         const sakit = Object.values(attendance).filter(v=>v==="sakit").length;
         const alpha = Object.values(attendance).filter(v=>v==="alpha").length;
         if (parentChart) parentChart.destroy();
-        parentChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Hadir', 'Izin', 'Sakit', 'Alpha'],
-                datasets: [{ label: 'Jumlah Santri', data: [hadir, izin, sakit, alpha], backgroundColor: ['#10b981', '#f59e0b', '#3b82f6', '#ef4444'], borderRadius: 8 }]
-            },
-            options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom' } } }
-        });
+        parentChart = new Chart(ctx, { type: 'bar', data: { labels: ['Hadir','Izin','Sakit','Alpha'], datasets: [{ data: [hadir,izin,sakit,alpha], backgroundColor: ['#10b981','#f59e0b','#3b82f6','#ef4444'] }] } });
     }
 
     function updateStatBox() {
-        document.getElementById("statBox").innerHTML = `
-            <div style="display:flex; gap:15px; flex-wrap:wrap;">
-                <div><strong>👨 Santriwan:</strong> ${santriwan.length}</div>
-                <div><strong>👩 Santriwati:</strong> ${santriwati.length}</div>
-                <div><strong>📋 Total Tugas:</strong> ${tugas.length}</div>
-                <div><strong>✅ Hadir Hari Ini:</strong> ${Object.values(attendance).filter(v=>v==="hadir").length}</div>
-            </div>
-        `;
+        document.getElementById("statBox").innerHTML = `<div style="display:flex; gap:10px;"><div>👨 Santriwan: ${santriwan.length}</div><div>👩 Santriwati: ${santriwati.length}</div><div>📋 Tugas: ${tugas.length}</div><div>✅ Hadir: ${Object.values(attendance).filter(v=>v==="hadir").length}</div></div>`;
     }
 
     function sendWA() {
-        const today = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        const today = new Date().toLocaleDateString('id-ID');
         let hadir=[], izin=[], sakit=[], alpha=[];
-        [...santriwan, ...santriwati].forEach(n => {
-            const s = attendance[n] || "alpha";
-            if (s === "hadir") hadir.push(n);
-            else if (s === "izin") izin.push(n);
-            else if (s === "sakit") sakit.push(n);
-            else alpha.push(n);
-        });
-        let message = `📋 *LAPORAN ABSEN NGAJI* 📋\n`;
-        message += `🏫 *Ponpes Maslakul Iman*\n`;
-        message += `📅 *Tanggal:* ${today}\n`;
-        message += `━━━━━━━━━━━━━━━━━━━━\n`;
-        message += `👥 *Total Santri:* ${santriwan.length + santriwati.length} orang\n`;
-        message += `✅ *Hadir:* ${hadir.length} orang\n`;
-        message += `📝 *Izin:* ${izin.length} orang\n`;
-        message += `🤒 *Sakit:* ${sakit.length} orang\n`;
-        message += `❌ *Alpha:* ${alpha.length} orang\n`;
-        message += `━━━━━━━━━━━━━━━━━━━━\n`;
-        if (hadir.length > 0) message += `✅ Hadir: ${hadir.join(", ")}\n`;
-        if (izin.length > 0) message += `📝 Izin: ${izin.join(", ")}\n`;
-        if (sakit.length > 0) message += `🤒 Sakit: ${sakit.join(", ")}\n`;
-        if (alpha.length > 0) message += `❌ Alpha: ${alpha.join(", ")}\n`;
-        message += `━━━━━━━━━━━━━━━━━━━━\n`;
-        message += `🤲 *Barakallah, tetap semangat!*`;
-        
-        window.open(`https://wa.me/6289528157038?text=${encodeURIComponent(message)}`, '_blank');
-        showToast("Mengarahkan ke WhatsApp...");
+        [...santriwan,...santriwati].forEach(n => { const s = attendance[n]||"alpha"; if(s==="hadir") hadir.push(n); else if(s==="izin") izin.push(n); else if(s==="sakit") sakit.push(n); else alpha.push(n); });
+        let msg = `📋 LAPORAN ABSEN NGAJI\n🏫 Maslakul Iman\n📅 ${today}\n━━━━━━━━━━━━━━━━\n✅ Hadir(${hadir.length}): ${hadir.join(", ")||"-"}\n📝 Izin(${izin.length}): ${izin.join(", ")||"-"}\n🤒 Sakit(${sakit.length}): ${sakit.join(", ")||"-"}\n❌ Alpha(${alpha.length}): ${alpha.join(", ")||"-"}\n━━━━━━━━━━━━━━━━\n🤲 Barakallah!`;
+        window.open(`https://wa.me/6289528157038?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
-    function showToast(msg) {
-        const toast = document.getElementById("toastMsg");
-        toast.innerText = msg;
-        toast.style.opacity = "1";
-        setTimeout(() => toast.style.opacity = "0", 3000);
-    }
+    function showToast(msg) { const t = document.getElementById("toastMsg"); t.innerText = msg; t.style.opacity = "1"; setTimeout(() => t.style.opacity = "0", 2000); }
 
-    function saveToLocal() {
-        localStorage.setItem("santriwan_list", JSON.stringify(santriwan));
-        localStorage.setItem("santriwati_list", JSON.stringify(santriwati));
-        localStorage.setItem("attendance_today", JSON.stringify(attendance));
-        localStorage.setItem("tugas_list", JSON.stringify(tugas));
-    }
-
-    // ======================= PASSWORD MODAL =======================
-    function showPasswordModal(page) {
-        return new Promise(resolve => {
-            pendingResolve = resolve;
-            document.getElementById("modalMsg").innerText = `Masukkan password untuk ${page}`;
-            document.getElementById("passwordModal").classList.add("active");
-        });
-    }
-
-    document.getElementById("passConfirm").onclick = () => {
-        if (pendingResolve) pendingResolve(document.getElementById("passInput").value);
-        closeModal();
-    };
-    document.getElementById("passCancel").onclick = () => {
-        if (pendingResolve) pendingResolve(null);
-        closeModal();
-    };
-    function closeModal() {
-        document.getElementById("passwordModal").classList.remove("active");
-        document.getElementById("passInput").value = "";
-    }
+    // ======================= PASSWORD =======================
+    function showPasswordModal(page) { return new Promise(r => { pendingResolve = r; document.getElementById("modalMsg").innerHTML = `Password ${page}`; document.getElementById("passwordModal").classList.add("active"); }); }
+    document.getElementById("passConfirm").onclick = () => { if(pendingResolve) pendingResolve(document.getElementById("passInput").value); closeModal(); };
+    document.getElementById("passCancel").onclick = () => { if(pendingResolve) pendingResolve(null); closeModal(); };
+    function closeModal() { document.getElementById("passwordModal").classList.remove("active"); document.getElementById("passInput").value = ""; }
 
     async function switchPage(page) {
-        if (page === "admin") {
-            const pwd = await showPasswordModal("Admin");
-            if (pwd !== "adminiman") { alert("Password salah!"); return; }
-        }
-        if (page === "attendance") {
-            const pwd = await showPasswordModal("Absensi");
-            if (pwd !== "guruhebat") { alert("Password salah!"); return; }
-        }
+        if (page === "admin") { const pwd = await showPasswordModal("Admin"); if (pwd !== "adminiman") { alert("Salah!"); return; } }
+        if (page === "attendance") { const pwd = await showPasswordModal("Absensi"); if (pwd !== "guruhebat") { alert("Salah!"); return; } }
         document.querySelectorAll(".dashboard-grid").forEach(el => el.classList.remove("active"));
         document.getElementById(page + "Page").classList.add("active");
-        currentPage = page;
     }
 
-    // ======================= EVENT LISTENERS =======================
-    document.querySelectorAll(".nav-btn").forEach(btn => {
-        btn.onclick = () => switchPage(btn.getAttribute("data-page"));
-    });
-    document.getElementById("tambahSantriwanBtn").onclick = () => {
-        const nama = document.getElementById("namaSantriBaru").value;
-        tambahSantri("wan", nama);
-        document.getElementById("namaSantriBaru").value = "";
-    };
-    document.getElementById("tambahSantriwatiBtn").onclick = () => {
-        const nama = document.getElementById("namaSantriBaru").value;
-        tambahSantri("wati", nama);
-        document.getElementById("namaSantriBaru").value = "";
-    };
-    document.getElementById("btnTambahTugas").onclick = () => {
-        const judul = document.getElementById("tugasJudul").value;
-        const desc = document.getElementById("tugasDesc").value;
-        tambahTugas(judul, desc);
-    };
-    document.getElementById("resetAbsenBtn").onclick = resetAbsen;
+    // ======================= EVENT & START =======================
+    document.querySelectorAll(".nav-btn").forEach(btn => btn.onclick = () => switchPage(btn.dataset.page));
+    document.getElementById("tambahSantriwanBtn").onclick = () => { tambahSantri("wan", document.getElementById("namaSantriBaru").value); document.getElementById("namaSantriBaru").value = ""; };
+    document.getElementById("tambahSantriwatiBtn").onclick = () => { tambahSantri("wati", document.getElementById("namaSantriBaru").value); document.getElementById("namaSantriBaru").value = ""; };
+    document.getElementById("btnTambahTugas").onclick = () => { saveTugasToSheet(document.getElementById("tugasJudul").value, document.getElementById("tugasDesc").value, "all"); document.getElementById("tugasJudul").value = ""; document.getElementById("tugasDesc").value = ""; };
+    document.getElementById("resetAbsenBtn").onclick = () => { if(confirm("Reset semua absen?")) { attendance = {}; localStorage.removeItem("attendance_today"); renderAll(); showToast("Absen direset (lokal)"); } };
     document.getElementById("sendWABtn").onclick = sendWA;
 
-    // ======================= LOAD DATA =======================
+    // Load data
     const storedWan = localStorage.getItem("santriwan_list");
     const storedWati = localStorage.getItem("santriwati_list");
     if (storedWan) santriwan = JSON.parse(storedWan);
     if (storedWati) santriwati = JSON.parse(storedWati);
     
     loadSantriFromSheets();
-    
-    // Auto refresh every 5 seconds
-    setInterval(() => {
-        loadSantriFromSheets();
-    }, 5000);
+    loadTugasFromSheet();
+    loadAbsenFromSheet();
+    setInterval(() => { loadAbsenFromSheet(); loadTugasFromSheet(); }, 10000);
 </script>
 </body>
 </html>
