@@ -10,40 +10,52 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background: linear-gradient(145deg, #eef2f7 0%, #d9e0e8 100%); min-height: 100vh; padding-bottom: 2rem; }
-        .navbar { background: linear-gradient(135deg, #1a472a, #0d2b1c); color: white; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; position: sticky; top: 0; z-index: 100; }
-        .nav-btn { background: rgba(255,255,255,0.15); border: none; padding: 6px 14px; border-radius: 40px; color: white; cursor: pointer; margin: 0 4px; }
+        .navbar { background: linear-gradient(135deg, #1a472a, #0d2b1c); color: white; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .logo h2 { font-size: 1.3rem; display: flex; align-items: center; gap: 8px; }
+        .nav-btn { background: rgba(255,255,255,0.15); border: none; padding: 8px 18px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s; margin: 0 4px; }
         .nav-btn.active { background: #fbbf24; color: #1a472a; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+        .nav-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
         .dashboard-grid { display: none; animation: fadeIn 0.3s ease; }
         .dashboard-grid.active { display: block; }
-        .card { background: white; border-radius: 1.5rem; padding: 1.2rem; margin-bottom: 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
-        .card h3 { color: #1a472a; border-left: 4px solid #fbbf24; padding-left: 12px; margin-bottom: 1rem; }
-        input, textarea { width: 100%; padding: 10px; border-radius: 40px; border: 1px solid #cbd5e1; margin-bottom: 8px; }
-        textarea { border-radius: 12px; }
-        .btn { background: #1a472a; color: white; border: none; padding: 8px 16px; border-radius: 40px; cursor: pointer; margin: 4px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: white; border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 8px 25px rgba(0,0,0,0.05); transition: 0.2s; border: 1px solid rgba(0,0,0,0.03); }
+        .card h3 { color: #1a472a; border-left: 4px solid #fbbf24; padding-left: 15px; margin-bottom: 1.2rem; font-size: 1.3rem; display: flex; align-items: center; gap: 10px; }
+        input, textarea { width: 100%; padding: 12px 16px; border-radius: 50px; border: 1px solid #e2e8f0; margin-bottom: 12px; font-size: 0.9rem; transition: 0.2s; background: #f8fafc; }
+        input:focus, textarea:focus { outline: none; border-color: #fbbf24; background: white; }
+        textarea { border-radius: 20px; }
+        .btn { background: #1a472a; color: white; border: none; padding: 8px 20px; border-radius: 40px; cursor: pointer; font-weight: 600; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn:hover { background: #0d2b1c; transform: scale(0.98); }
         .btn-warning { background: #fbbf24; color: #1a472a; }
         .btn-danger { background: #dc2626; }
-        .santri-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; max-height: 500px; overflow-y: auto; }
-        .santri-card { background: #f8fafc; border-radius: 1rem; padding: 10px; text-align: center; cursor: pointer; border: 2px solid transparent; }
+        .btn-outline { background: transparent; border: 2px solid #1a472a; color: #1a472a; }
+        .santri-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; max-height: 550px; overflow-y: auto; padding: 5px; }
+        .santri-card { background: #f8fafc; border-radius: 1rem; padding: 12px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+        .santri-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .santri-card.selected-hadir { border-color: #10b981; background: #d1fae5; }
         .santri-card.selected-izin { border-color: #f59e0b; background: #fed7aa; }
         .santri-card.selected-sakit { border-color: #3b82f6; background: #dbeafe; }
         .santri-card.selected-alpha { border-color: #ef4444; background: #fee2e2; }
-        .status-options { display: flex; justify-content: center; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-        .status-option { font-size: 0.7rem; padding: 3px 8px; border-radius: 20px; background: white; cursor: pointer; }
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .status-options { display: flex; justify-content: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+        .status-option { font-size: 0.7rem; padding: 4px 10px; border-radius: 30px; background: white; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: 0.1s; }
+        .status-option:active { transform: scale(0.95); }
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
-        .modal-content { background: white; padding: 1.5rem; border-radius: 1rem; max-width: 320px; width: 90%; text-align: center; }
-        .toast { position: fixed; bottom: 20px; left: 20px; background: #1a472a; color: white; padding: 8px 16px; border-radius: 40px; opacity: 0; transition: 0.2s; z-index: 1100; }
-        .santri-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #f8fafc; margin-bottom: 6px; border-radius: 40px; }
-        .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        @media (max-width: 640px) { .two-columns { grid-template-columns: 1fr; } }
-        .live-badge { background: #10b98120; color: #10b981; padding: 2px 8px; border-radius: 20px; font-size: 0.6rem; margin-left: 8px; }
+        .modal-content { background: white; padding: 1.8rem; border-radius: 1.5rem; max-width: 350px; width: 90%; text-align: center; }
+        .modal-content input { width: 100%; padding: 12px; margin: 1rem 0; border-radius: 50px; border: 1px solid #ccc; }
+        .toast { position: fixed; bottom: 25px; left: 25px; background: #1a472a; color: white; padding: 12px 20px; border-radius: 50px; font-size: 0.85rem; z-index: 1100; opacity: 0; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .santri-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: #f8fafc; margin-bottom: 8px; border-radius: 50px; transition: 0.1s; }
+        .santri-item:hover { background: #f1f5f9; }
+        .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 640px) { .container { padding: 1rem; } .two-columns { grid-template-columns: 1fr; } .nav-btn { padding: 6px 12px; font-size: 0.8rem; } }
+        .live-badge { background: #10b98120; color: #10b981; padding: 4px 12px; border-radius: 30px; font-size: 0.7rem; margin-left: 10px; font-weight: normal; }
+        .stat-card { background: linear-gradient(135deg, #1a472a, #0d2b1c); color: white; padding: 15px; border-radius: 1rem; text-align: center; flex: 1; min-width: 100px; }
+        .flex-stats { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 <div class="navbar">
-    <div class="logo"><h2><i class="fas fa-mosque"></i> Maslakul Iman <span class="live-badge"><i class="fas fa-globe"></i> LIVE</span></h2></div>
+    <div class="logo"><h2><i class="fas fa-mosque"></i> Maslakul Iman <span class="live-badge"><i class="fas fa-circle"></i> LIVE SYNC</span></h2></div>
     <div class="nav-buttons">
         <button class="nav-btn" data-page="admin">👑 Admin</button>
         <button class="nav-btn" data-page="parent">👪 Pantau</button>
@@ -52,31 +64,54 @@
 </div>
 <div class="container">
     <div id="adminPage" class="dashboard-grid">
-        <div class="card"><h3>Statistik</h3><div id="statBox"></div></div>
-        <div class="card"><h3>Kelola Santri</h3><div style="display:flex; gap:10px;"><input type="text" id="namaSantriBaru" placeholder="Nama Santri" style="flex:1;"><button class="btn" id="tambahSantriwanBtn">+ Santriwan</button><button class="btn" id="tambahSantriwatiBtn">+ Santriwati</button></div>
-        <div class="two-columns"><div><h4>Santriwan</h4><div id="listWan"></div></div><div><h4>Santriwati</h4><div id="listWati"></div></div></div></div>
-        <div class="card"><h3>Manajemen Tugas</h3><input type="text" id="tugasJudul" placeholder="Judul Tugas"><textarea id="tugasDesc" rows="2" placeholder="Deskripsi"></textarea><button class="btn" id="btnTambahTugas">Simpan Tugas</button><div id="tugasListAdmin" style="margin-top:15px;"></div></div>
+        <div class="card">
+            <h3><i class="fas fa-chart-line"></i> Statistik Real-time</h3>
+            <div class="flex-stats" id="statBox"></div>
+        </div>
+        <div class="card">
+            <h3><i class="fas fa-user-plus"></i> Kelola Santri</h3>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px;">
+                <input type="text" id="namaSantriBaru" placeholder="Nama Santri Baru" style="flex:2;">
+                <button class="btn" id="tambahSantriwanBtn"><i class="fas fa-male"></i> Santriwan</button>
+                <button class="btn" id="tambahSantriwatiBtn"><i class="fas fa-female"></i> Santriwati</button>
+            </div>
+            <div class="two-columns">
+                <div><h4 style="margin-bottom:10px;">👨 Santriwan</h4><div id="listWan"></div></div>
+                <div><h4 style="margin-bottom:10px;">👩 Santriwati</h4><div id="listWati"></div></div>
+            </div>
+        </div>
+        <div class="card">
+            <h3><i class="fas fa-tasks"></i> Manajemen Tugas</h3>
+            <input type="text" id="tugasJudul" placeholder="Judul Tugas">
+            <textarea id="tugasDesc" rows="2" placeholder="Deskripsi Tugas"></textarea>
+            <button class="btn" id="btnTambahTugas"><i class="fas fa-save"></i> Simpan Tugas (LIVE)</button>
+            <div id="tugasListAdmin" style="margin-top:20px;"></div>
+        </div>
     </div>
     <div id="parentPage" class="dashboard-grid">
-        <div class="card"><h3>Rekap Kehadiran</h3><canvas id="parentChart" style="max-height:200px"></canvas></div>
-        <div class="card"><h3>Tugas Terbaru</h3><div id="parentTugasList"></div></div>
-        <div class="card"><h3>Status Santri</h3><div id="parentSantriStatus"></div></div>
+        <div class="card"><h3><i class="fas fa-chart-pie"></i> Rekap Kehadiran Hari Ini</h3><canvas id="parentChart" style="max-height:220px; width:100%"></canvas></div>
+        <div class="card"><h3><i class="fas fa-tasks"></i> Tugas Terbaru</h3><div id="parentTugasList"></div></div>
+        <div class="card"><h3><i class="fas fa-users"></i> Status Santri Hari Ini</h3><div id="parentSantriStatus"></div></div>
     </div>
     <div id="attendancePage" class="dashboard-grid">
-        <div class="card"><h3>Absensi Hari Ini</h3><div class="santri-grid" id="absenContainer"></div><div style="margin-top:1rem;"><button class="btn btn-warning" id="resetAbsenBtn">Reset</button><button class="btn" id="sendWABtn">Kirim WA</button></div></div>
+        <div class="card">
+            <h3><i class="fas fa-calendar-check"></i> Absensi Hari Ini <span class="live-badge"><i class="fas fa-sync-alt"></i> Real-time</span></h3>
+            <div class="santri-grid" id="absenContainer"></div>
+            <div style="margin-top:1.5rem; display:flex; gap:12px; justify-content:flex-end;">
+                <button class="btn btn-warning" id="resetAbsenBtn"><i class="fas fa-sync-alt"></i> Reset Hari Ini</button>
+                <button class="btn" id="sendWABtn"><i class="fab fa-whatsapp"></i> Kirim Laporan WA</button>
+            </div>
+        </div>
     </div>
 </div>
 <div id="toastMsg" class="toast"></div>
-<div id="passwordModal" class="modal"><div class="modal-content"><h3>Akses Terbatas</h3><p id="modalMsg"></p><input type="password" id="passInput"><div><button id="passConfirm">Masuk</button><button id="passCancel">Batal</button></div></div></div>
+<div id="passwordModal" class="modal"><div class="modal-content"><i class="fas fa-lock" style="font-size:2rem; color:#1a472a;"></i><h3 style="margin:10px 0;">Akses Terbatas</h3><p id="modalMsg"></p><input type="password" id="passInput" placeholder="Password"><div style="display:flex;gap:12px;justify-content:center;"><button id="passConfirm" class="btn">Masuk</button><button id="passCancel" class="btn btn-outline">Batal</button></div></div></div>
 
 <script>
-    // ======================= KONFIGURASI (⚠️ GANTI DENGAN LINK ANDA) =======================
+    // ======================= KONFIGURASI =======================
     const CSV_SANTRIWAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQj934LvpLD3x5EZ_t6eykdBUUy2ksOA1SJ8b0DYIibarFokQOqshgDsqJrX3yT_lwzdz0MmUOy8sqk/pub?gid=0&single=true&output=csv";
     const CSV_SANTRIWATI = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQj934LvpLD3x5EZ_t6eykdBUUy2ksOA1SJ8b0DYIibarFokQOqshgDsqJrX3yT_lwzdz0MmUOy8sqk/pub?gid=491190605&single=true&output=csv";
-    const CSV_TUGAS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQj934LvpLD3x5EZ_t6eykdBUUy2ksOA1SJ8b0DYIibarFokQOqshgDsqJrX3yT_lwzdz0MmUOy8sqk/pub?gid=1689847811&single=true&output=csv";
-    const CSV_ABSEN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQj934LvpLD3x5EZ_t6eykdBUUy2ksOA1SJ8b0DYIibarFokQOqshgDsqJrX3yT_lwzdz0MmUOy8sqk/pub?gid=20112682&single=true&output=csv";
-    
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyRiOzg_Vz9UrYLeaaNsDOHJzAKZqnVyqwlN6mBLSPw8fiJP_WksbDRxI-pAO2BZ3m0/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwV2TRg5ngHqzFtnhPAVk8UmitBZT6XjrXHlav5kyPqhuk3o0z4Il2A5lBabOiTvmgP/exec";
     
     let santriwan = [], santriwati = [], attendance = {}, tugas = [];
     let parentChart = null;
@@ -91,16 +126,31 @@
             if (rows.length < 2) return [];
             return rows.slice(1).map(r => {
                 let cleaned = r.replace(/^"|"$/g, '');
-                let firstCol = cleaned.split(",")[0];
-                return firstCol;
-            }).filter(n => n && n !== "Nama" && n !== "nama" && n !== "Judul");
+                return cleaned.split(",")[0];
+            }).filter(n => n && n !== "Nama" && n !== "nama");
         } catch(e) { 
-            console.error("Fetch error:", url, e);
+            console.error("Fetch error:", e);
             return []; 
         }
     }
 
-    async function loadSantriFromSheets() {
+    // ======================= CALL APPS SCRIPT =======================
+    async function callScript(action, data = {}) {
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action, ...data })
+            });
+            return await response.json();
+        } catch (e) {
+            console.error("Script error:", e);
+            return null;
+        }
+    }
+
+    // ======================= LOAD DATA =======================
+    async function loadSantri() {
         const [wan, wati] = await Promise.all([fetchCSV(CSV_SANTRIWAN), fetchCSV(CSV_SANTRIWATI)]);
         santriwan = wan;
         santriwati = wati;
@@ -108,35 +158,48 @@
         renderAttendance();
         renderParentView();
         updateStatBox();
-        showToast(`📥 Santri: ${santriwan.length} santriwan, ${santriwati.length} santriwati`);
+        showToast(`📥 Data santri dimuat: ${santriwan.length} santriwan, ${santriwati.length} santriwati`);
     }
 
-    async function loadTugasFromSheet() {
-        const data = await fetchCSV(CSV_TUGAS);
-        // Data dari CSV tugas: kolom 1=judul, kolom2=deskripsi, kolom3=target, kolom4=tanggal
-        tugas = data.map((judul, i) => ({ id: i, judul, deskripsi: "Detail tugas", target: "all", tanggal: new Date().toLocaleDateString() }));
+    async function loadTugas() {
+        const result = await callScript("loadTugas");
+        if (result && result.tugas) tugas = result.tugas;
+        else tugas = [];
         renderAdminTugas();
         renderParentView();
+        updateStatBox();
     }
 
-    async function loadAbsenFromSheet() {
-        const data = await fetchCSV(CSV_ABSEN);
-        // Data dari CSV absen: kolom1=tanggal, kolom2=nama, kolom3=status
-        const newAttendance = {};
-        const today = new Date().toISOString().split('T')[0];
-        for (let i = 0; i < data.length; i += 3) {
-            if (data[i] === today) {
-                newAttendance[data[i+1]] = data[i+2];
-            }
-        }
-        attendance = newAttendance;
+    async function loadAbsen() {
+        const result = await callScript("loadAbsen");
+        if (result && result.absen) attendance = result.absen;
+        else attendance = {};
         renderAttendance();
         renderParentView();
         updateParentChart();
         updateStatBox();
     }
 
-    // ======================= FUNGSI TAMBAH SANTRI (Lokal) =======================
+    // ======================= SAVE DATA =======================
+    async function saveTugas(judul, deskripsi) {
+        if (!judul.trim()) return showToast("Judul wajib diisi");
+        showToast("📤 Menyimpan tugas ke cloud...");
+        await callScript("tambahTugas", { judul, deskripsi, target: "all" });
+        await loadTugas();
+        showToast("✅ Tugas tersimpan & tersinkron!");
+        document.getElementById("tugasJudul").value = "";
+        document.getElementById("tugasDesc").value = "";
+    }
+
+    async function saveAbsen(nama, status) {
+        const today = new Date().toISOString().split('T')[0];
+        showToast(`📤 Menyimpan ${nama}: ${status}...`);
+        await callScript("updateAbsen", { tanggal: today, nama, status });
+        await loadAbsen();
+        showToast(`✅ ${nama}: ${status} (tersinkron)`);
+    }
+
+    // ======================= FUNGSI SANTRI (Lokal + Backup) =======================
     function tambahSantri(gender, nama) {
         if (!nama.trim()) return showToast("Nama tidak boleh kosong");
         if (gender === "wan") {
@@ -157,7 +220,7 @@
     }
 
     function hapusSantri(gender, nama) {
-        if (!confirm(`Hapus ${nama}?`)) return;
+        if (!confirm(`Hapus ${nama} dari daftar?`)) return;
         if (gender === "wan") santriwan = santriwan.filter(n => n !== nama);
         else santriwati = santriwati.filter(n => n !== nama);
         localStorage.setItem("santriwan_list", JSON.stringify(santriwan));
@@ -165,24 +228,36 @@
         renderSantriLists();
         renderAttendance();
         updateStatBox();
+        showToast(`🗑️ ${nama} dihapus`);
+    }
+
+    function resetAbsen() {
+        if (confirm("Reset semua absen hari ini?")) {
+            attendance = {};
+            renderAttendance();
+            renderParentView();
+            updateParentChart();
+            updateStatBox();
+            showToast("Absen direset (lokal)");
+        }
     }
 
     // ======================= RENDER =======================
     function renderSantriLists() {
-        document.getElementById("listWan").innerHTML = santriwan.map(n => `<div class="santri-item"><span>👨 ${n}</span><button class="btn-danger" style="padding:4px 12px;" onclick="hapusSantri('wan','${n}')">Hapus</button></div>`).join("");
-        document.getElementById("listWati").innerHTML = santriwati.map(n => `<div class="santri-item"><span>👩 ${n}</span><button class="btn-danger" style="padding:4px 12px;" onclick="hapusSantri('wati','${n}')">Hapus</button></div>`).join("");
+        document.getElementById("listWan").innerHTML = santriwan.map(n => `<div class="santri-item"><span>👨 ${n}</span><button class="btn-danger" style="padding:5px 12px;" onclick="hapusSantri('wan','${n}')">Hapus</button></div>`).join("");
+        document.getElementById("listWati").innerHTML = santriwati.map(n => `<div class="santri-item"><span>👩 ${n}</span><button class="btn-danger" style="padding:5px 12px;" onclick="hapusSantri('wati','${n}')">Hapus</button></div>`).join("");
     }
 
     function renderAdminTugas() {
         const container = document.getElementById("tugasListAdmin");
-        if (!tugas.length) { container.innerHTML = "<p>Belum ada tugas</p>"; return; }
-        container.innerHTML = tugas.map(t => `<div style="background:#f1f5f9;padding:10px;border-radius:12px;margin-bottom:8px;"><strong>📌 ${t.judul}</strong><br><small>${t.deskripsi || "-"}</small><br><small>📅 ${t.tanggal}</small></div>`).join("");
+        if (!tugas.length) { container.innerHTML = "<p style='text-align:center;color:gray;'>Belum ada tugas. Silakan tambah tugas.</p>"; return; }
+        container.innerHTML = tugas.map((t, i) => `<div style="background:#f1f5f9;padding:14px;border-radius:16px;margin-bottom:10px;"><strong>📌 ${t.judul}</strong><br><small>${t.deskripsi || "-"}</small><br><small style="color:gray;">📅 ${t.tanggal}</small></div>`).join("");
     }
 
     function renderAttendance() {
         const allSantri = [...santriwan, ...santriwati];
         const container = document.getElementById("absenContainer");
-        if (!allSantri.length) { container.innerHTML = "<p>Belum ada santri</p>"; return; }
+        if (!allSantri.length) { container.innerHTML = "<p style='text-align:center;'>Belum ada santri</p>"; return; }
         container.innerHTML = allSantri.map(s => {
             const status = attendance[s] || "";
             let cls = "";
@@ -190,39 +265,16 @@
             else if (status === "izin") cls = "selected-izin";
             else if (status === "sakit") cls = "selected-sakit";
             else if (status === "alpha") cls = "selected-alpha";
-            return `<div class="santri-card ${cls}" data-name="${s}"><div><strong>${s}</strong></div><div class="status-options"><span class="status-option" data-status="hadir">✅ Hadir</span><span class="status-option" data-status="izin">📝 Izin</span><span class="status-option" data-status="sakit">🤒 Sakit</span><span class="status-option" data-status="alpha">❌ Alpha</span></div><div>${status ? status.toUpperCase() : "Belum"}</div></div>`;
+            return `<div class="santri-card ${cls}" data-name="${s}"><div><strong>${s}</strong></div><div class="status-options"><span class="status-option" data-status="hadir">✅ Hadir</span><span class="status-option" data-status="izin">📝 Izin</span><span class="status-option" data-status="sakit">🤒 Sakit</span><span class="status-option" data-status="alpha">❌ Alpha</span></div><div style="margin-top:6px; font-size:12px;">${status ? status.toUpperCase() : "Belum"}</div></div>`;
         }).join("");
-        document.querySelectorAll(".status-option").forEach(opt => opt.onclick = (e) => { e.stopPropagation(); const name = opt.closest(".santri-card").dataset.name; updateAbsenLocal(name, opt.dataset.status); });
-    }
-
-    function updateAbsenLocal(nama, status) {
-        attendance[nama] = status;
-        localStorage.setItem("attendance_today", JSON.stringify(attendance));
-        renderAttendance();
-        renderParentView();
-        updateParentChart();
-        updateStatBox();
-        showToast(`${nama}: ${status}`);
-        // Opsional: kirim ke Apps Script jika perlu
-    }
-
-    function resetAbsen() {
-        if (confirm("Reset semua absen?")) {
-            attendance = {};
-            localStorage.setItem("attendance_today", JSON.stringify(attendance));
-            renderAttendance();
-            renderParentView();
-            updateParentChart();
-            updateStatBox();
-            showToast("Absen direset");
-        }
+        document.querySelectorAll(".status-option").forEach(opt => opt.onclick = (e) => { e.stopPropagation(); const name = opt.closest(".santri-card").dataset.name; saveAbsen(name, opt.dataset.status); });
     }
 
     function renderParentView() {
         const allSantri = [...santriwan, ...santriwati];
-        document.getElementById("parentSantriStatus").innerHTML = allSantri.map(s => `<div style="padding:6px; border-bottom:1px solid #ccc;"><strong>${s}</strong> : ${attendance[s] || "Belum"}</div>`).join("");
-        if (!tugas.length) { document.getElementById("parentTugasList").innerHTML = "<p>Belum ada tugas</p>"; return; }
-        document.getElementById("parentTugasList").innerHTML = tugas.map(t => `<div style="background:#f1f5f9;padding:10px;border-radius:12px;margin-bottom:8px;"><strong>📖 ${t.judul}</strong><br>${t.deskripsi}<br><small>📅 ${t.tanggal}</small></div>`).join("");
+        document.getElementById("parentSantriStatus").innerHTML = allSantri.map(s => `<div style="padding:10px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between;"><strong>${s}</strong> <span style="background:${attendance[s] === 'hadir' ? '#10b98120' : attendance[s] === 'izin' ? '#f59e0b20' : attendance[s] === 'sakit' ? '#3b82f620' : '#ef444420'}; padding:4px 14px; border-radius:30px;">${attendance[s] || "Belum"}</span></div>`).join("");
+        if (!tugas.length) { document.getElementById("parentTugasList").innerHTML = "<p style='text-align:center;color:gray;'>Belum ada tugas</p>"; return; }
+        document.getElementById("parentTugasList").innerHTML = tugas.map(t => `<div style="background:#f1f5f9;padding:14px;border-radius:16px;margin-bottom:10px;"><strong>📖 ${t.judul}</strong><br>${t.deskripsi}<br><small style="color:gray;">📅 ${t.tanggal}</small></div>`).join("");
     }
 
     function updateParentChart() {
@@ -233,53 +285,58 @@
         const sakit = Object.values(attendance).filter(v=>v==="sakit").length;
         const alpha = Object.values(attendance).filter(v=>v==="alpha").length;
         if (parentChart) parentChart.destroy();
-        parentChart = new Chart(ctx, { type: 'bar', data: { labels: ['Hadir','Izin','Sakit','Alpha'], datasets: [{ data: [hadir,izin,sakit,alpha], backgroundColor: ['#10b981','#f59e0b','#3b82f6','#ef4444'] }] } });
+        parentChart = new Chart(ctx, { type: 'bar', data: { labels: ['Hadir','Izin','Sakit','Alpha'], datasets: [{ label: 'Jumlah Santri', data: [hadir,izin,sakit,alpha], backgroundColor: ['#10b981','#f59e0b','#3b82f6','#ef4444'], borderRadius: 10 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom' } } } });
     }
 
     function updateStatBox() {
-        document.getElementById("statBox").innerHTML = `<div style="display:flex; gap:10px; flex-wrap:wrap;"><div>👨 Santriwan: ${santriwan.length}</div><div>👩 Santriwati: ${santriwati.length}</div><div>📋 Tugas: ${tugas.length}</div><div>✅ Hadir: ${Object.values(attendance).filter(v=>v==="hadir").length}</div></div>`;
+        document.getElementById("statBox").innerHTML = `<div class="stat-card"><i class="fas fa-male fa-2x"></i><h3>${santriwan.length}</h3><p>Santriwan</p></div><div class="stat-card"><i class="fas fa-female fa-2x"></i><h3>${santriwati.length}</h3><p>Santriwati</p></div><div class="stat-card"><i class="fas fa-tasks fa-2x"></i><h3>${tugas.length}</h3><p>Total Tugas</p></div><div class="stat-card"><i class="fas fa-check-circle fa-2x"></i><h3>${Object.values(attendance).filter(v=>v==="hadir").length}</h3><p>Hadir Hari Ini</p></div>`;
     }
 
     function sendWA() {
-        const today = new Date().toLocaleDateString('id-ID');
+        const today = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         let hadir=[], izin=[], sakit=[], alpha=[];
         [...santriwan,...santriwati].forEach(n => { const s = attendance[n]||"alpha"; if(s==="hadir") hadir.push(n); else if(s==="izin") izin.push(n); else if(s==="sakit") sakit.push(n); else alpha.push(n); });
-        let msg = `📋 LAPORAN ABSEN NGAJI\n🏫 Maslakul Iman\n📅 ${today}\n━━━━━━━━━━━━━━━━\n✅ Hadir(${hadir.length}): ${hadir.join(", ")||"-"}\n📝 Izin(${izin.length}): ${izin.join(", ")||"-"}\n🤒 Sakit(${sakit.length}): ${sakit.join(", ")||"-"}\n❌ Alpha(${alpha.length}): ${alpha.join(", ")||"-"}\n━━━━━━━━━━━━━━━━\n🤲 Barakallah!`;
+        let msg = `📋 *LAPORAN ABSEN NGAJI* 📋\n🏫 *Ponpes Maslakul Iman*\n📅 *Tanggal:* ${today}\n━━━━━━━━━━━━━━━━━━━━\n👥 *Total Santri:* ${santriwan.length + santriwati.length} orang\n✅ *Hadir:* ${hadir.length} orang\n📝 *Izin:* ${izin.length} orang\n🤒 *Sakit:* ${sakit.length} orang\n❌ *Alpha:* ${alpha.length} orang\n━━━━━━━━━━━━━━━━━━━━\n✅ Hadir: ${hadir.join(", ")||"-"}\n📝 Izin: ${izin.join(", ")||"-"}\n🤒 Sakit: ${sakit.join(", ")||"-"}\n❌ Alpha: ${alpha.join(", ")||"-"}\n━━━━━━━━━━━━━━━━━━━━\n🤲 *Barakallah, tetap semangat!*`;
         window.open(`https://wa.me/6289528157038?text=${encodeURIComponent(msg)}`, '_blank');
+        showToast("📱 Mengarahkan ke WhatsApp...");
     }
 
-    function showToast(msg) { const t = document.getElementById("toastMsg"); t.innerText = msg; t.style.opacity = "1"; setTimeout(() => t.style.opacity = "0", 2000); }
+    function showToast(msg) { const t = document.getElementById("toastMsg"); t.innerText = msg; t.style.opacity = "1"; setTimeout(() => t.style.opacity = "0", 2500); }
 
     // ======================= PASSWORD =======================
-    function showPasswordModal(page) { return new Promise(r => { pendingResolve = r; document.getElementById("modalMsg").innerHTML = `Password ${page}`; document.getElementById("passwordModal").classList.add("active"); }); }
+    function showPasswordModal(page) { return new Promise(r => { pendingResolve = r; document.getElementById("modalMsg").innerHTML = `Masukkan password untuk <strong>${page}</strong>`; document.getElementById("passwordModal").classList.add("active"); }); }
     document.getElementById("passConfirm").onclick = () => { if(pendingResolve) pendingResolve(document.getElementById("passInput").value); closeModal(); };
     document.getElementById("passCancel").onclick = () => { if(pendingResolve) pendingResolve(null); closeModal(); };
     function closeModal() { document.getElementById("passwordModal").classList.remove("active"); document.getElementById("passInput").value = ""; }
 
     async function switchPage(page) {
-        if (page === "admin") { const pwd = await showPasswordModal("Admin"); if (pwd !== "adminiman") { alert("Salah!"); return; } }
-        if (page === "attendance") { const pwd = await showPasswordModal("Absensi"); if (pwd !== "guruhebat") { alert("Salah!"); return; } }
+        if (page === "admin") { const pwd = await showPasswordModal("Admin"); if (pwd !== "adminiman") { alert("Password salah!"); return; } }
+        if (page === "attendance") { const pwd = await showPasswordModal("Absensi"); if (pwd !== "guruhebat") { alert("Password salah!"); return; } }
         document.querySelectorAll(".dashboard-grid").forEach(el => el.classList.remove("active"));
         document.getElementById(page + "Page").classList.add("active");
     }
 
-    // ======================= EVENT & START =======================
+    // ======================= EVENT LISTENERS =======================
     document.querySelectorAll(".nav-btn").forEach(btn => btn.onclick = () => switchPage(btn.dataset.page));
     document.getElementById("tambahSantriwanBtn").onclick = () => { tambahSantri("wan", document.getElementById("namaSantriBaru").value); document.getElementById("namaSantriBaru").value = ""; };
     document.getElementById("tambahSantriwatiBtn").onclick = () => { tambahSantri("wati", document.getElementById("namaSantriBaru").value); document.getElementById("namaSantriBaru").value = ""; };
-    document.getElementById("btnTambahTugas").onclick = () => { showToast("Fitur tambah tugas via CSV sedang dalam pengembangan"); };
+    document.getElementById("btnTambahTugas").onclick = () => { saveTugas(document.getElementById("tugasJudul").value, document.getElementById("tugasDesc").value); };
     document.getElementById("resetAbsenBtn").onclick = resetAbsen;
     document.getElementById("sendWABtn").onclick = sendWA;
 
+    // Load data dari localStorage
     const storedWan = localStorage.getItem("santriwan_list");
     const storedWati = localStorage.getItem("santriwati_list");
     if (storedWan) santriwan = JSON.parse(storedWan);
     if (storedWati) santriwati = JSON.parse(storedWati);
     
-    loadSantriFromSheets();
-    loadTugasFromSheet();
-    loadAbsenFromSheet();
-    setInterval(() => { loadAbsenFromSheet(); loadTugasFromSheet(); }, 15000);
+    // Start
+    loadSantri();
+    loadTugas();
+    loadAbsen();
+    
+    // Auto refresh setiap 8 detik (LIVE)
+    setInterval(() => { loadAbsen(); loadTugas(); }, 8000);
 </script>
 </body>
 </html>
